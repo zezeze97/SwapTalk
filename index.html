@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
   <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="DESCRIPTION META TAG">
-  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta name="description" content="SwapTalk">
+  <meta property="og:title" content="SwapTalk: Audio-Driven Talking Face Generation with One-Shot Customization in Latent Space"/>
   <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
   <meta property="og:url" content="URL OF THE WEBSITE"/>
   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
@@ -64,10 +64,10 @@
                   </span>
                   </div>
 
-                  <div class="is-size-5 publication-authors">
+                  <!--div class="is-size-5 publication-authors">
                     <span class="author-block">Institution Name<br>Conferance name and year</span>
                     <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
-                  </div>
+                  </div-->
 
                   <div class="column has-text-centered">
                     <div class="publication-links">
@@ -127,13 +127,14 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video poster="" id="tree" autoplay controls muted loop height="100%">
+      <!--video poster="" id="tree" autoplay controls muted loop height="100%"-->
         <!-- Your video here -->
-        <source src="static/videos/banner_video.mp4"
+        <!--source src="static/videos/banner_video.mp4"
         type="video/mp4">
-      </video>
+      </video-->
+      <img src="static/images/overall_pipeline.png" alt="MY ALT TEXT"/>
       <h2 class="subtitle has-text-centered">
-        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
+        (a) The overall framework of our proposed method. The facial image is first encoded into the VQ-embedding space. Then, the face swapping module (b) and the lip-sync module (c) handle face swapping and lip synchronization, respectively. Finally, the VQ Decoder converts the output back into RGB space, producing a customized talking face video. 
       </h2>
     </div>
   </div>
