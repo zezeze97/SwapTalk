@@ -122,17 +122,37 @@
   </div>
 </section>
 
-
+<!-- Image carousel -->
 <section class="hero is-small">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <img src="static/images/overall_pipeline.png" alt="MY ALT TEXT"/>
-      <h2 class="subtitle has-text-centered">
-        (a) Details of the encoding process of the VQ Encoder. (b) The overall framework of our proposed method. The facial image is first encoded into the VQ-embedding space. Then, the face swapping module (c) and the lip-sync module (d) handle face swapping and lip synchronization, respectively. Finally, the VQ Decoder converts the output back into RGB space, producing a customized talking face video.
-      </h2>
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/first_page_00.png" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Our model is capable of transferring the facial region of a user-defined personalized avatar (source ID) onto a specified target template, while also accommodating lip shape deformations to ensure that the lip movements in the generated video are synchronized with the user-specified audio content.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/overall_pipeline.png" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          (a) Details of the encoding process of the VQ Encoder. (b) The overall framework of our proposed method. The facial image is first encoded into the VQ-embedding space. Then, the face swapping module (c) and the lip-sync module (d) handle face swapping and lip synchronization, respectively. Finally, the VQ Decoder converts the output back into RGB space, producing a customized talking face video.
+        </h2>
     </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/main_expr.png" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Quantitative comparison results of our model with various baseline models on the HDTF test set for both self-driven and cross-driven settings.
+        </h2>
+      </div>
   </div>
+</div>
+</div>
 </section>
+<!-- End image carousel -->
 
 <!-- Paper abstract -->
 <section class="section hero is-light">
@@ -150,38 +170,6 @@
   </div>
 </section>
 <!-- End paper abstract -->
-
-<!-- Image carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/first_page_00.png" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-          Our model is capable of transferring the facial region of a user-defined personalized avatar (source ID) onto a specified target template, while also accommodating lip shape deformations to ensure that the lip movements in the generated video are synchronized with the user-specified audio content.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/main_expr.png" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-          Quantitative comparison results of our model with various baseline models on the HDTF test set for both self-driven and cross-driven settings.
-        </h2>
-      </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/showcase-3_00.png" alt="MY ALT TEXT"/>
-        <h2 class="subtitle has-text-centered">
-          In the cross-driven scenario, a visual comparison of various cascade methods with the method we propose.
-       </h2>
-     </div>
-  </div>
-</div>
-</div>
-</section>
-<!-- End image carousel -->
 
 
 <section class="hero teaser">
