@@ -26,8 +26,11 @@ def create_subtitle_function(text, font_size, y_position):
 def concat(video_file_lst, output_path):
     clip_lst = []
     for video_path in video_file_lst:
-        clip_lst.append(VideoFileClip(video_path))
-    final_clip = concatenate_videoclips(clip_lst)
+        clip = VideoFileClip(video_path)
+        clip = clip.crossfadein(0.5)
+        clip = clip.crossfadeout(0.5)
+        clip_lst.append(clip)
+    final_clip = concatenate_videoclips(clip_lst, method="compose")
     final_clip.write_videofile(output_path, audio_codec='aac')
 
 
@@ -112,8 +115,9 @@ def concat_v1():
 if __name__ == '__main__':
     import os
     video_file_lst = ['static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4',
-                      'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4']
-    output_path = os.path.join('static/videos', 'compare_with_wav2lip.mp4')
+                      'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4'
+                      ]
+    output_path ='static/videos/compare_with_wav2lip.mp4'
     concat(video_file_lst, output_path)
     
     # concat_v1()
