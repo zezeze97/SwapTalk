@@ -111,11 +111,9 @@ def concat_v1():
 
 if __name__ == '__main__':
     import os
-    video_file_lst = ['static/videos/concat_results_cross_driven_compare/WDA_BernieSanders_000_023_230_240_WDA_MichaelBennet_000_004_40_50_concat.mp4',
-                      'static/videos/concat_results_cross_driven_compare/WDA_MichaelBennet_000_002_20_30_RD_Radio35_000_004_40_50_concat.mp4',
-                      'static/videos/concat_results_cross_driven_compare/WRA_RoyBlunt_000_003_30_40_RD_Radio11_001_000_0_10_concat.mp4',
-                      'static/videos/concat_results_cross_driven_compare/WRA_SteveDaines0_000_000_0_10_WDA_NancyPelosi0_000_021_210_220_concat.mp4']
-    output_path = os.path.join('static/videos/concat_results_cross_driven_compare', 'concat.mp4')
+    video_file_lst = ['static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4',
+                      'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4']
+    output_path = os.path.join('static/videos', 'compare_with_wav2lip.mp4')
     concat(video_file_lst, output_path)
     
     # concat_v1()
