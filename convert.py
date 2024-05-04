@@ -31,7 +31,20 @@ def concat(video_file_lst, output_path):
         clip = clip.crossfadeout(0.5)
         clip_lst.append(clip)
     final_clip = concatenate_videoclips(clip_lst, method="compose")
-    final_clip.write_videofile(output_path, audio_codec='aac')
+    final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac')
+    
+    
+def concat_v2(video_file_lst, output_path):
+    clip_lst = []
+    for video_path in video_file_lst:
+        clip = VideoFileClip(video_path)
+        clip_lst.append(clip)
+    final_clip = clips_array([clip_lst])
+    final_clip = final_clip.set_audio(clip.audio)
+    final_clip = final_clip.subclip(0, 9.96)
+    final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac')
+
+    
 
 
 def concat_v1():
@@ -114,11 +127,9 @@ def concat_v1():
 
 if __name__ == '__main__':
     import os
-    video_file_lst = ['static/videos/concat_zip_self_construct_vision_compare/RD_Radio21_000_003_30_48_concat.mp4',
-                      'static/videos/concat_zip_self_construct_vision_compare/WDA_NancyPelosi0_000_012_120_130_concat.mp4',
-                      'static/videos/concat_zip_self_construct_vision_compare/WRA_SamBrownback_000_009_90_100_concat.mp4',
-                      'static/videos/concat_zip_self_construct_vision_compare/WRA_SteveDaines0_000_008_80_93_concat.mp4']
-    output_path ='static/videos/concat_zip_self_construct_vision_compare/concat.mp4'
+    video_file_lst = ['static/videos/HDTF_Demo/concat_more2one.mp4',
+                      'static/videos/HDTF_Demo/concat_one2more.mp4']
+    output_path ='static/videos/HDTF_Demo'
     concat(video_file_lst, output_path)
     
     # concat_v1()
