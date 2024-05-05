@@ -23,16 +23,20 @@ def create_subtitle_function(text, font_size, y_position):
     
     return add_subtitle
 
-def concat(video_file_lst, output_path):
+def concat(video_file_lst, output_path, time=None):
     clip_lst = []
     for i, video_path in enumerate(video_file_lst):
         if i > 0:
             clip = VideoFileClip(video_path)
+            if time is not None:
+                clip.subclip(time[i])
             clip = clip.crossfadein(0.5)
             clip = clip.crossfadeout(0.5)
             clip_lst.append(clip)
         else:
             clip = VideoFileClip(video_path)
+            if time is not None:
+                clip.subclip(time[i])
             clip = clip.crossfadeout(0.5)
             clip_lst.append(clip)
     final_clip = concatenate_videoclips(clip_lst, method="compose")
@@ -132,10 +136,8 @@ def concat_v1():
 
 if __name__ == '__main__':
     import os
-    video_file_lst = ['static/videos/concat_zip_self_construct_vision_compare/RD_Radio21_000_003_30_48_concat.mp4',
-                      'static/videos/concat_zip_self_construct_vision_compare/WDA_NancyPelosi0_000_012_120_130_concat.mp4',
-                      'static/videos/concat_zip_self_construct_vision_compare/WRA_SamBrownback_000_009_90_100_concat.mp4',
-                      'static/videos/concat_zip_self_construct_vision_compare/WRA_SteveDaines0_000_008_80_93_concat.mp4']
+    video_file_lst = ['static/videos/HDTF_Demo/WDA_DebbieStabenow_target_select/concat.mp4',
+                      '']
     output_path ='static/videos/concat_zip_self_construct_vision_compare'
     concat(video_file_lst, output_path)
     
