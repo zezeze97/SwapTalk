@@ -171,9 +171,6 @@
           Our model is capable of transferring the facial region of a user-defined personalized avatar (source ID) onto a specified target template, while also accommodating lip shape deformations to ensure that the lip movements in the generated video are synchronized with the user-specified audio content. The following figure illustrates the overall framework of our proposed method. The facial image is first encoded into the VQ-embedding space. Then, the face swapping module (c) and the lip-sync module (d) handle face swapping and lip synchronization, respectively. Finally, the VQ Decoder converts the output back into RGB space, producing a customized talking face video.
         </p>
       </div>
-      <!--h2 class="subtitle has-text-centered">
-        Our model is capable of transferring the facial region of a user-defined personalized avatar (source ID) onto a specified target template, while also accommodating lip shape deformations to ensure that the lip movements in the generated video are synchronized with the user-specified audio content. The following figure illustrates the overall framework of our proposed method. The facial image is first encoded into the VQ-embedding space. Then, the face swapping module (c) and the lip-sync module (d) handle face swapping and lip synchronization, respectively. Finally, the VQ Decoder converts the output back into RGB space, producing a customized talking face video.
-      </h2-->
       <img src="static/images/overall_pipeline.png" alt="MY ALT TEXT"/>
     </div>
   </div>
@@ -184,9 +181,11 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <h2 class="title is-3">Quantitative Experiments</h2>
-      <h2 class="subtitle has-text-centered">
-        Quantitative comparison results of our model with various baseline models on the HDTF test set for both self-driven and cross-driven settings.
-      </h2>
+      <div class="content has-text-justified">
+        <p>
+          Quantitative comparison results of our model with various baseline models on the HDTF test set for both self-driven and cross-driven settings. Without extra training data, our model surpasses other benchmarks in terms of image generation quality (as indicated by FID and SSIM metrics), lip synchronization accuracy (LMD or LSE-C), face swapping fidelity (ID Retrieve and Consistency). After incorporating additional training data, our model's performance further improved.
+        </p>
+      </div>
       <img src="static/images/main_expr.png" alt="MY ALT TEXT"/>      
     </div>
   </div>
@@ -199,9 +198,12 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <h2 class="subtitle has-text-centered">
-        The comparison between our proposed SwapTalk and various vanilla cascade methods under cross-driven setting.
-      </h2>
+      <h2 class="title is-3">Demo Videos</h2>
+      <div class="content has-text-justified">
+        <p>
+        The comparison between our proposed SwapTalk and various vanilla cascade methods under cross-driven setting, showing that Sync-Swap falls short in lip performance compared to Swap-Sync. Furthermore, both numerical and visual results point out that integrating face restoration model (as seen in Sync-Swap-Restore and Swap-Restore-Sync schemes) significantly enhances image clarity (as measured by the CPBD metric) but at the expense of lip synchronization (LMD and LSE-C), face swapping fidelity, and video identity consistency (ID Retrieve and Consistency) decreased. Faces processed with image restoration technology often exhibit errors in facial texture, gaze, and lip detail accuracy, whereas our model demonstrates better performance in these aspects.
+        </p>
+      </div>
       <video poster="" id="tree" controls height="100%">
         <!-- Your video here -->
         <source src="static/videos/concat_results_cross_driven_compare/concat.mp4"
@@ -217,7 +219,7 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <h2 class="subtitle has-text-centered">
+      <h2 class="content has-text-justified">
         In self-driven scenarios, although Wav2Lip achieves a higher LSE-C score, our methods (Ours Lip-Sync and SwapTalk) produce videos with lip movements that are more visually synchronized with the audio. In cross-driven settings, our models (Ours Lip-Sync and SwapTalk) also perform better.
       </h2>
       <video poster="" id="video1" controls height="100%">
@@ -236,7 +238,7 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <h2 class="subtitle has-text-centered">
+      <h2 class="content has-text-justified">
         The following video demonstrates the lip-sync outcomes at varying compression ratios; the 8x compression rate introduces noticeable flickering and ghosting in the mouth region, whereas the 16x rate achieves superior results.
       </h2>
       <video poster="" id="tree" controls height="100%">
