@@ -2,7 +2,7 @@ from moviepy.editor import *
 import cv2
 
 # 创建一个函数，允许传递额外参数
-def create_subtitle_function(text, font_size, y_position):
+def create_subtitle_function(text, font_size, x_position, y_position):
     def add_subtitle(frame):
         # 将 MoviePy 的帧转换为 OpenCV 的图像格式
         cv_image = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
@@ -10,7 +10,8 @@ def create_subtitle_function(text, font_size, y_position):
         # 在 OpenCV 图像上添加字幕
         font = cv2.FONT_HERSHEY_SIMPLEX
         textsize = cv2.getTextSize(text, font, font_size, 2)[0]
-        textX = (cv_image.shape[1] - textsize[0]) // 2
+        # textX = (cv_image.shape[1] - textsize[0]) // 2
+        textX = x_position
         textY = y_position
         
         # 首先用黑色文字绘制轮廓，增加字幕的清晰度
@@ -60,7 +61,7 @@ def concat_v1():
     top = 0
     bottom = 0
     height = 320
-    save_path = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/'
+    save_path = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select'
     if not os.path.exists(save_path):
         os.makedirs(save_path)
         
@@ -82,47 +83,47 @@ def concat_v1():
     first_frame = source_video.get_frame(0)
     image_clip = ImageClip(first_frame)
     source_video = image_clip.set_duration(source_video.duration)
-    custom_subtitle = create_subtitle_function("Source ID", 0.6, 15)
-    source_video = source_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("Source ID", 0.6, 15)
+    # source_video = source_video.fl_image(custom_subtitle)
     
     
     swap_sample1_video = VideoFileClip(swap_sample1).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample1_video = swap_sample1_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample1_video = swap_sample1_video.fl_image(custom_subtitle)
     
     swap_sample2_video = VideoFileClip(swap_sample2).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample2_video = swap_sample2_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample2_video = swap_sample2_video.fl_image(custom_subtitle)
     
     swap_sample3_video = VideoFileClip(swap_sample3).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample3_video = swap_sample3_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample3_video = swap_sample3_video.fl_image(custom_subtitle)
     
     swap_sample4_video = VideoFileClip(swap_sample4).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample4_video = swap_sample4_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample4_video = swap_sample4_video.fl_image(custom_subtitle)
     
     swap_sample5_video = VideoFileClip(swap_sample5).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample5_video = swap_sample5_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample5_video = swap_sample5_video.fl_image(custom_subtitle)
     
     swap_sample6_video = VideoFileClip(swap_sample6).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample6_video = swap_sample6_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample6_video = swap_sample6_video.fl_image(custom_subtitle)
     
     swap_sample7_video = VideoFileClip(swap_sample7).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample7_video = swap_sample7_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample7_video = swap_sample7_video.fl_image(custom_subtitle)
     
     
     swap_sample8_video = VideoFileClip(swap_sample8).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample8_video = swap_sample8_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample8_video = swap_sample8_video.fl_image(custom_subtitle)
     
     
     swap_sample9_video = VideoFileClip(swap_sample9).resize(height=height)
-    custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
-    swap_sample9_video = swap_sample9_video.fl_image(custom_subtitle)
+    # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
+    # swap_sample9_video = swap_sample9_video.fl_image(custom_subtitle)
     
     
     
@@ -134,13 +135,27 @@ def concat_v1():
 
 
 
+def add_zm(input_file, output_file):
+    video = VideoFileClip(input_file)
+    custom_subtitle = create_subtitle_function("same target different source", 1.0, 15, 15)
+    video = video.fl_image(custom_subtitle)
+    video.write_videofile(output_file, audio_codec='aac')
+        
+
 if __name__ == '__main__':
     import os
-    video_file_lst = ['static/videos/HDTF_Demo/WDA_DebbieStabenow_target_select/concat.mp4',
-                      '']
-    output_path ='static/videos/concat_zip_self_construct_vision_compare'
-    concat(video_file_lst, output_path)
+    video_file_lst = ['static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_BernieSanders_000_026_260_270_WRA_RoyBlunt_000_003_30_40.mp4',
+                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_ChuckSchumer0_000_008_80_90_WRA_RoyBlunt_000_003_30_40.mp4',
+                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_PeterDeFazio_000_017_170_180_WRA_RoyBlunt_000_003_30_40.mp4',
+                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_RonWyden0_000_001_10_20_WRA_RoyBlunt_000_003_30_40.mp4',
+                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WRA_AdamKinzinger0_000_004_40_50_WRA_RoyBlunt_000_003_30_40.mp4']
+    output_path ='static/videos/HDTF_Demo/WRA_RoyBlunt_target_select'
+    # concat_v2(video_file_lst, output_path)
     
     # concat_v1()
+    input_file = 'static/videos/HDTF_Demo/WDA_DebbieStabenow_target_select/concat.mp4'
+    output_file = 'static/videos/HDTF_Demo/WDA_DebbieStabenow_target_select/concat_add.mp4'
+    add_zm(input_file, output_file)
+    
     
 
