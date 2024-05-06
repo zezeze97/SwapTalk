@@ -135,27 +135,67 @@ def concat_v1():
 
 
 
-def add_zm(input_file, output_file):
-    video = VideoFileClip(input_file)
-    custom_subtitle = create_subtitle_function("same target different source", 1.0, 15, 15)
-    video = video.fl_image(custom_subtitle)
-    video.write_videofile(output_file, audio_codec='aac')
+
+def add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=24, font='Arial'):
+    """
+    将字幕添加在视频画面下方的扩展区域。
+
+    :param subtitle_text: 字幕内容字符串
+    :param input_video_path: 输入视频文件的路径
+    :param output_video_path: 输出视频文件的路径
+    :param fontsize: 字体大小 (默认24)
+    :param font: 字体类型 (默认Arial)
+    """
+    # 加载原始视频
+    video = VideoFileClip(input_video_path)
+    original_width, original_height = video.size
+
+    # 创建一个 TextClip 来表示字幕
+    txt_clip = TextClip(
+        subtitle_text,
+        fontsize=fontsize,
+        color='white',
+        font=font,
+        stroke_color='white',
+        stroke_width=2
+    ).set_duration(video.duration)
+
+    # 计算字幕的高度，并扩展视频的高度来放置字幕
+    subtitle_height = txt_clip.h
+    new_height = original_height + subtitle_height
+
+    # 将字幕移动到扩展画布的底部
+    txt_clip = txt_clip.set_position(("center", original_height))
+
+    # 扩展画布并将原视频和字幕合成
+    extended_video = video.margin(bottom=subtitle_height, color=(0, 0, 0))
+    result = CompositeVideoClip([extended_video, txt_clip])
+
+
+    # 导出带字幕的视频
+    result.write_videofile(output_video_path, audio_codec='aac')
         
 
 if __name__ == '__main__':
-    import os
-    video_file_lst = ['static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_BernieSanders_000_026_260_270_WRA_RoyBlunt_000_003_30_40.mp4',
-                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_ChuckSchumer0_000_008_80_90_WRA_RoyBlunt_000_003_30_40.mp4',
-                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_PeterDeFazio_000_017_170_180_WRA_RoyBlunt_000_003_30_40.mp4',
-                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WDA_RonWyden0_000_001_10_20_WRA_RoyBlunt_000_003_30_40.mp4',
-                      'static/videos/HDTF_Demo/WRA_RoyBlunt_target_select/WRA_AdamKinzinger0_000_004_40_50_WRA_RoyBlunt_000_003_30_40.mp4']
-    output_path ='static/videos/HDTF_Demo/WRA_RoyBlunt_target_select'
-    # concat_v2(video_file_lst, output_path)
     
-    # concat_v1()
-    input_file = 'static/videos/HDTF_Demo/WDA_DebbieStabenow_target_select/concat.mp4'
-    output_file = 'static/videos/HDTF_Demo/WDA_DebbieStabenow_target_select/concat_add.mp4'
-    add_zm(input_file, output_file)
+    video_file_lst = ['static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4',
+                      'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4'
+                      ]
+    output_path = 'static/videos'
+    concat(video_file_lst,
+           output_path)
+    '''
+    subtitle_text = 'Cross-Driven'
+    input_video_path = 'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4'
+    output_video_path = 'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4'
+    
+    add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=30)
+    '''
+    
+    
+    
+
+    
     
     
 
