@@ -177,7 +177,7 @@ def add_external_subtitle_to_video(subtitle_text, input_video_path, output_video
         
 
 if __name__ == '__main__':
-    
+    '''
     video_file_lst = ['static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4',
                       'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4'
                       ]
@@ -185,12 +185,12 @@ if __name__ == '__main__':
     concat(video_file_lst,
            output_path)
     '''
-    subtitle_text = 'Cross-Driven'
-    input_video_path = 'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4'
-    output_video_path = 'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4'
+    subtitle_text = 'Self-Driven'
+    input_video_path = 'static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4'
+    output_video_path = 'static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4'
     
     add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=30)
-    '''
+    
     
     
     
