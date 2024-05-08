@@ -1,5 +1,6 @@
 from moviepy.editor import *
 import cv2
+import os
 
 # 创建一个函数，允许传递额外参数
 def create_subtitle_function(text, font_size, x_position, y_position):
@@ -51,38 +52,40 @@ def concat_v2(video_file_lst, output_path):
         clip_lst.append(clip)
     final_clip = clips_array([clip_lst])
     final_clip = final_clip.set_audio(clip.audio)
-    final_clip = final_clip.subclip(0, 9.96)
+    # final_clip = final_clip.subclip(0, 9.96)
     final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac')
 
     
 
 
-def concat_v1():
+def concat_v1(root_path):
     top = 0
     bottom = 0
     height = 320
-    save_path = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select'
+    save_path = root_path
     if not os.path.exists(save_path):
         os.makedirs(save_path)
         
-    source_video_path = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/target.mp4'
-    swap_sample1 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_000_0_10_WDA_JohnSarbanes0_000_010_100_110.mp4'
-    swap_sample2 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_000_0_10_WDA_PatrickLeahy1_000_028_280_290.mp4'
-    swap_sample3 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_000_0_10_WRA_CoryGardner0_000_006_60_70.mp4'
-    swap_sample4 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_001_10_20_WDA_JoeManchin_000_006_60_70.mp4'
-    swap_sample5 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_001_10_20_WDA_TomCarper_000_011_110_120.mp4'
-    swap_sample6 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_002_20_30_WRA_MikeEnzi_000_026_260_270.mp4'
-    swap_sample7 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_003_30_40_WDA_BobbyScott_000_005_50_60.mp4'
-    swap_sample8 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_003_30_40_WDA_SherrodBrown1_000_022_220_230.mp4'
-    swap_sample9 = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/WRA_RoyBlunt_000_004_40_58_WDA_ChrisCoons1_000_014_140_150.mp4'
+    # source_video_path = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/target.mp4'
+    source_video_path = os.path.join(root_path, 'target.mp4')
+    swap_video_path_lst = [os.path.join(root_path, item) for item in os.listdir(root_path) if 'target' not in item and '.mp4' in item and 'concat' not in item]
+    
+    assert len(swap_video_path_lst) == 9
+    
+    
+    swap_sample1 = swap_video_path_lst[0]
+    swap_sample2 = swap_video_path_lst[1]
+    swap_sample3 = swap_video_path_lst[2]
+    swap_sample4 = swap_video_path_lst[3]
+    swap_sample5 = swap_video_path_lst[4]
+    swap_sample6 = swap_video_path_lst[5]
+    swap_sample7 = swap_video_path_lst[6]
+    swap_sample8 = swap_video_path_lst[7]
+    swap_sample9 = swap_video_path_lst[8]
     
     
     
-    source_video = VideoFileClip(source_video_path).resize(height=height)
-    # 重塑 source video只保留第一帧
-    first_frame = source_video.get_frame(0)
-    image_clip = ImageClip(first_frame)
-    source_video = image_clip.set_duration(source_video.duration)
+    
     # custom_subtitle = create_subtitle_function("Source ID", 0.6, 15)
     # source_video = source_video.fl_image(custom_subtitle)
     
@@ -90,6 +93,12 @@ def concat_v1():
     swap_sample1_video = VideoFileClip(swap_sample1).resize(height=height)
     # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
     # swap_sample1_video = swap_sample1_video.fl_image(custom_subtitle)
+    
+    source_video = VideoFileClip(source_video_path).resize(height=height)
+    # 重塑 source video只保留第一帧
+    first_frame = source_video.get_frame(0)
+    image_clip = ImageClip(first_frame)
+    source_video = image_clip.set_duration(swap_sample1_video.duration)
     
     swap_sample2_video = VideoFileClip(swap_sample2).resize(height=height)
     # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
@@ -130,7 +139,7 @@ def concat_v1():
     final_clip = clips_array([[source_video, swap_sample1_video, swap_sample2_video, swap_sample3_video, swap_sample4_video],
                               [swap_sample5_video, swap_sample6_video, swap_sample7_video, swap_sample8_video, swap_sample9_video]])
     final_clip = final_clip.set_audio(swap_sample1_video.audio)
-    final_clip = final_clip.subclip(0, 9.96)
+    final_clip = final_clip.subclip(0, 10)
     final_clip.write_videofile(os.path.join(save_path, 'concat.mp4'), audio_codec='aac')
 
 
@@ -177,20 +186,38 @@ def add_external_subtitle_to_video(subtitle_text, input_video_path, output_video
         
 
 if __name__ == '__main__':
-    
-    video_file_lst = ['static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4',
-                      'static/videos/concat_results_cross_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4'
-                      ]
-    output_path = 'static/videos'
-    concat(video_file_lst,
-           output_path)
     '''
-    subtitle_text = 'Self-Driven'
-    input_video_path = 'static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat.mp4'
-    output_video_path = 'static/videos/concat_results_self_driven_compare_with_wav2lip/WRA_SteveDaines0_000_008_80_93_WDA_NancyPelosi0_000_012_120_130_concat_add_subtitle.mp4'
+    lst = ['static/videos/HDTF_New/RD_Radio11_001_select',
+           'static/videos/HDTF_New/WDA_DebHaaland_select',
+           'static/videos/HDTF_New/WDA_KatieHill_select',
+           'static/videos/HDTF_New/WDA_MichaelBennet_select',
+           'static/videos/HDTF_New/WRA_RoyBlunt_select']
+    for item in lst:
+        concat_v1(item)
     
-    add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=30)
+    
+    
+    
     '''
+    video_file_lst = ['static/videos/HDTF_New/WDA_DebbieStabenow_target_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/WDA_MichaelBennet_target_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/WDA_KatieHill_target_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/WRA_RoyBlunt_target_select/concat_add_subs.mp4',
+                    'static/videos/HDTF_New/WDA_KatieHill_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/WDA_MichaelBennet_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/RD_Radio11_001_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/WRA_RoyBlunt_select/concat_add_subs.mp4',
+                      'static/videos/HDTF_New/WDA_DebHaaland_select/concat_add_subs.mp4']
+    output_path = './static/videos/HDTF_New'
+    
+    concat(video_file_lst, output_path)
+    
+    # subtitle_text = 'Same Source Different Target'
+    # input_video_path = 'static/videos/HDTF_New/WRA_RoyBlunt_select/concat.mp4'
+    # output_video_path = 'static/videos/HDTF_New/WRA_RoyBlunt_select/concat_add_subs.mp4'
+    
+    # add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=30)
+    
     
     
     
