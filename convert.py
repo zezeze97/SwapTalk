@@ -25,22 +25,25 @@ def create_subtitle_function(text, font_size, x_position, y_position):
     
     return add_subtitle
 
-def concat(video_file_lst, output_path, time=None):
+def concat(video_file_lst, output_path):
     clip_lst = []
     for i, video_path in enumerate(video_file_lst):
+        clip = VideoFileClip(video_path)
+        clip_duration = clip.duration
+        # 减去视频末尾的0.5秒
+        clip = clip.subclip(0, max(0, clip_duration - 0.2))
+        
         if i > 0:
-            clip = VideoFileClip(video_path)
-            if time is not None:
-                clip.subclip(time[i])
+            # 为后续的视频添加交叉淡入
             clip = clip.crossfadein(0.5)
+        
+        if i < len(video_file_lst) - 1:
+            # 除了最后一个视频外，其他视频添加交叉淡出
             clip = clip.crossfadeout(0.5)
-            clip_lst.append(clip)
-        else:
-            clip = VideoFileClip(video_path)
-            if time is not None:
-                clip.subclip(time[i])
-            clip = clip.crossfadeout(0.5)
-            clip_lst.append(clip)
+        
+        clip_lst.append(clip)
+    
+    # 使用"compose"方法连接视频片段，允许交叉淡入淡出
     final_clip = concatenate_videoclips(clip_lst, method="compose")
     final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac')
     
@@ -67,7 +70,7 @@ def concat_v1(root_path):
         os.makedirs(save_path)
         
     # source_video_path = 'static/videos/HDTF_Demo/WRA_RoyBlunt/select/target.mp4'
-    source_video_path = os.path.join(root_path, 'target.mp4')
+    # source_video_path = os.path.join(root_path, 'target.mp4')
     swap_video_path_lst = [os.path.join(root_path, item) for item in os.listdir(root_path) if 'target' not in item and '.mp4' in item and 'concat' not in item]
     
     assert len(swap_video_path_lst) == 9
@@ -94,11 +97,12 @@ def concat_v1(root_path):
     # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
     # swap_sample1_video = swap_sample1_video.fl_image(custom_subtitle)
     
-    source_video = VideoFileClip(source_video_path).resize(height=height)
+    # source_video = VideoFileClip(source_video_path).resize(height=height)
     # 重塑 source video只保留第一帧
-    first_frame = source_video.get_frame(0)
+    # first_frame = source_video.get_frame(0)
+    first_frame = cv2.cvtColor(cv2.imread(os.path.join(root_path, 'source.png')), cv2.COLOR_BGR2RGB)
     image_clip = ImageClip(first_frame)
-    source_video = image_clip.set_duration(swap_sample1_video.duration)
+    source_video = image_clip.set_duration(swap_sample1_video.duration).resize(height=height)
     
     swap_sample2_video = VideoFileClip(swap_sample2).resize(height=height)
     # custom_subtitle = create_subtitle_function("SwapTalk", 0.6, 15)
@@ -139,7 +143,7 @@ def concat_v1(root_path):
     final_clip = clips_array([[source_video, swap_sample1_video, swap_sample2_video, swap_sample3_video, swap_sample4_video],
                               [swap_sample5_video, swap_sample6_video, swap_sample7_video, swap_sample8_video, swap_sample9_video]])
     final_clip = final_clip.set_audio(swap_sample1_video.audio)
-    final_clip = final_clip.subclip(0, 10)
+    # final_clip = final_clip.subclip(0, 10)
     final_clip.write_videofile(os.path.join(save_path, 'concat.mp4'), audio_codec='aac')
 
 
@@ -198,7 +202,7 @@ if __name__ == '__main__':
     
     
     
-    '''
+    
     video_file_lst = ['static/videos/HDTF_New/WDA_DebbieStabenow_target_select/concat_add_subs.mp4',
                       'static/videos/HDTF_New/WDA_MichaelBennet_target_select/concat_add_subs.mp4',
                       'static/videos/HDTF_New/WDA_KatieHill_target_select/concat_add_subs.mp4',
@@ -211,14 +215,25 @@ if __name__ == '__main__':
     output_path = './static/videos/HDTF_New'
     
     concat(video_file_lst, output_path)
+    '''
     
-    # subtitle_text = 'Same Source Different Target'
-    # input_video_path = 'static/videos/HDTF_New/WRA_RoyBlunt_select/concat.mp4'
-    # output_video_path = 'static/videos/HDTF_New/WRA_RoyBlunt_select/concat_add_subs.mp4'
+    # subtitle_text = 'Same Source (from other) Different Target (from other)'
+    # input_video_path = 'static/videos/new_demo/one2more/qcx/concat.mp4'
+    # output_video_path = 'static/videos/new_demo/one2more/qcx/concat_add_subs.mp4'
     
-    # add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=30)
+    # add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=24)
+    # concat_v1('static/videos/new_demo/one2more/qcx')
+    
+    video_lst = ['static/videos/new_demo/more2one/WDA_MichaelBennet/concat_add_subs.mp4',
+                'static/videos/new_demo/more2one/WDA_DebbieStabenow1_000_001_10_20/concat_add_subs.mp4',
+                'static/videos/new_demo/more2one/bilibili/concat_add_subs.mp4',
+                'static/videos/new_demo/one2more/WDA_MichaelBennet/concat_add_subs.mp4',
+                'static/videos/new_demo/one2more/Taylor/concat_add_subs.mp4',
+                'static/videos/new_demo/one2more/qcx/concat_add_subs.mp4']
     
     
+    concat(video_lst, 'static/videos/new_demo')
+   
     
     
 
