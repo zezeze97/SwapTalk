@@ -45,18 +45,48 @@ def concat(video_file_lst, output_path):
     
     # 使用"compose"方法连接视频片段，允许交叉淡入淡出
     final_clip = concatenate_videoclips(clip_lst, method="compose")
-    final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac')
+    final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac',)
     
     
-def concat_v2(video_file_lst, output_path):
+def concat_v2(root_path):
+    video_2x1_lst = [os.path.join(root_path, item) for item in os.listdir(root_path) if len(item) > 10]
+    assert len(video_2x1_lst) == 4
+    
+    
     clip_lst = []
-    for video_path in video_file_lst:
+    for video_path in video_2x1_lst:
         clip = VideoFileClip(video_path)
         clip_lst.append(clip)
+    
+    # 创建一个黑色的视频片段作为左上角的占位符
+    black_clip = ColorClip(size=(320, 320), color=(0,0,0), duration=clip.duration)
+    subtitle = TextClip("Different Target →\n(Outside HDTF)\n\n\nSame Source\n(Outside HDTF)\n ↓", fontsize=30, color='white', font="Arial-Bold")
+    subtitle = subtitle.set_position(('center')).set_duration(clip.duration)
+    # 将字幕添加到黑色背景上
+    black_clip_with_subtitle = CompositeVideoClip([black_clip, subtitle])  
+    
+    
+    # target_video = VideoFileClip(os.path.join(root_path, 'target.mp4')).resize(height=320)
+    # Rtarget_video = target_video.fx(vfx.time_mirror)
+    # 获取最后一帧的图像
+    # last_frame_image = target_video.get_frame(target_video.duration)
+    # last_frame_clip = ImageClip(last_frame_image).set_duration(0.1).set_fps(target_video.fps)
+    
+    # 再倒放一遍
+    # target_video = concatenate_videoclips([target_video, Rtarget_video])
+    # 重塑 source video只保留第一帧
+    # first_frame = target_video.get_frame(0)
+    first_frame = cv2.imread(os.path.join(root_path, 'source.png'))
+    first_frame = cv2.cvtColor(first_frame, cv2.COLOR_BGR2RGB)
+    image_clip = ImageClip(first_frame)
+    source_video = image_clip.set_duration(clip.duration).resize(height=320)
+    left_clip = clips_array([[black_clip_with_subtitle], [source_video]]) 
+    clip_lst.insert(0,left_clip )
+    
     final_clip = clips_array([clip_lst])
     final_clip = final_clip.set_audio(clip.audio)
-    # final_clip = final_clip.subclip(0, 9.96)
-    final_clip.write_videofile(os.path.join(output_path, 'concat.mp4'), audio_codec='aac')
+    final_clip = final_clip.subclip(0, final_clip.duration-0.1)
+    final_clip.write_videofile(os.path.join(root_path, 'concat.mp4'), audio_codec='aac', bitrate='4000k')
 
     
 
@@ -187,7 +217,22 @@ def add_external_subtitle_to_video(subtitle_text, input_video_path, output_video
 
     # 导出带字幕的视频
     result.write_videofile(output_video_path, audio_codec='aac')
-        
+
+
+def convert_inverse(video_path, output_path):
+    video = VideoFileClip(video_path)
+    Rvideo = video.fx(vfx.time_mirror)
+    output_video = concatenate_videoclips([video, Rvideo])
+    output_video = output_video.subclip(0, 15)
+    output_video.write_videofile(output_path)
+
+
+
+def louder_video(input_path, output_path):
+    video = VideoFileClip(input_path)
+    louder_video = video.volumex(4.0)
+    louder_video.write_videofile(output_path, audio_codec='aac', bitrate='4000k')
+    
 
 if __name__ == '__main__':
     '''
@@ -223,19 +268,20 @@ if __name__ == '__main__':
     
     # add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=24)
     # concat_v1('static/videos/new_demo/one2more/qcx')
+    # concat_v2('static/videos/new_demo_v2/one2more/wlh_select')
     
-    video_lst = ['static/videos/new_demo/more2one/WDA_MichaelBennet/concat_add_subs.mp4',
-                'static/videos/new_demo/more2one/WDA_DebbieStabenow1_000_001_10_20/concat_add_subs.mp4',
-                'static/videos/new_demo/more2one/bilibili/concat_add_subs.mp4',
-                'static/videos/new_demo/one2more/WDA_MichaelBennet/concat_add_subs.mp4',
-                'static/videos/new_demo/one2more/Taylor/concat_add_subs.mp4',
-                'static/videos/new_demo/one2more/qcx/concat_add_subs.mp4']
-    
-    
-    concat(video_lst, 'static/videos/new_demo')
+    louder_video('static/videos/new_demo_v2/one2more/Taylor/concat.mp4', 
+                 'static/videos/new_demo_v2/one2more/Taylor/concat_louder.mp4')
+    video_lst = ['static/videos/new_demo_v2/more2one/WDA_MichaelBennet/concat.mp4',
+                 'static/videos/new_demo_v2/more2one/WDA_DebbieStabenow/concat.mp4',
+                 'static/videos/new_demo_v2/more2one/bilibili/concat.mp4',
+                 'static/videos/new_demo_v2/one2more/WDA_MichaelBennet/concat.mp4',
+                 'static/videos/new_demo_v2/one2more/Taylor/concat_louder.mp4',
+                 'static/videos/new_demo_v2/one2more/wlh_select/concat.mp4']
+    output_path = 'static/videos/new_demo_v2'
    
     
-    
+    concat(video_lst, output_path)
 
     
     
