@@ -76,8 +76,9 @@ def concat_v2(root_path):
     # target_video = concatenate_videoclips([target_video, Rtarget_video])
     # 重塑 source video只保留第一帧
     # first_frame = target_video.get_frame(0)
-    first_frame = cv2.imread(os.path.join(root_path, 'source.png'))
-    first_frame = cv2.cvtColor(first_frame, cv2.COLOR_BGR2RGB)
+    # first_frame = cv2.imread(os.path.join(root_path, 'source.png'))
+    # first_frame = cv2.cvtColor(first_frame, cv2.COLOR_BGR2RGB)
+    first_frame = VideoFileClip(os.path.join(root_path, 'source.mp4')).get_frame(0)
     image_clip = ImageClip(first_frame)
     source_video = image_clip.set_duration(clip.duration).resize(height=320)
     left_clip = clips_array([[black_clip_with_subtitle], [source_video]]) 
@@ -268,20 +269,12 @@ if __name__ == '__main__':
     
     # add_external_subtitle_to_video(subtitle_text, input_video_path, output_video_path, fontsize=24)
     # concat_v1('static/videos/new_demo/one2more/qcx')
-    # concat_v2('static/videos/new_demo_v2/one2more/wlh_select')
+    concat_v2('static/videos/new_demo_v2/one2more/WDA_MichaelBennet')
     
-    louder_video('static/videos/new_demo_v2/one2more/Taylor/concat.mp4', 
-                 'static/videos/new_demo_v2/one2more/Taylor/concat_louder.mp4')
-    video_lst = ['static/videos/new_demo_v2/more2one/WDA_MichaelBennet/concat.mp4',
-                 'static/videos/new_demo_v2/more2one/WDA_DebbieStabenow/concat.mp4',
-                 'static/videos/new_demo_v2/more2one/bilibili/concat.mp4',
-                 'static/videos/new_demo_v2/one2more/WDA_MichaelBennet/concat.mp4',
-                 'static/videos/new_demo_v2/one2more/Taylor/concat_louder.mp4',
-                 'static/videos/new_demo_v2/one2more/wlh_select/concat.mp4']
-    output_path = 'static/videos/new_demo_v2'
+    
    
     
-    concat(video_lst, output_path)
+    # concat(video_lst, output_path)
 
     
     
